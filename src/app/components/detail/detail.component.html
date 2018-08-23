@@ -1,9 +1,37 @@
 <div class="card">
   <div class="card-body">
-    <h5 class="card-title">{{currencyData.name}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
+    <span (click)="goBack()">
+      <i class="fa fa-arrow-left" aria-hidden="true" style="padding-right: 8px"></i>Go back
+    </span>
+    <br /><br />
+    <h3 class="card-title">{{currencyData.name}}</h3>
+    <p class="card-text">
+      Price:
+      <span style="font-size:1.5rem">${{currencyData.price}}</span>
+    </p>
+    <h6 class="card-subtitle mb-2 text-muted">Circulating Supply: {{currencyData.circulating_supply | number : '1.2-2'}}</h6>
+    <h6 class="card-subtitle mb-2 text-muted">Total Supply: {{currencyData.total_supply | number : '1.2-2'}}</h6>
+    <p>Volume 24hr: {{currencyData.quote.USD.volume_24h | number : '1.2-2'}}</p>
+    <p>Symbol: {{currencyData.symbol}}</p>
+    <p>CMC Rank: {{currencyData.cmc_rank}}</p>
+    <p>Slug: {{currencyData.slug}}</p>
+    <p>Date Added: {{currencyData.date_added | date: "MMM d, y"}}</p>
+    <p>Percentage Change (1 hr):
+      <span style="font-size: 1.4rem" [style.color]="currencyData.quote.USD.percent_change_1h < 0 ? 'red' : 'green'">
+        {{currencyData.quote.USD.percent_change_1h}}%
+      </span>
+    </p>
+    <p>Percentage Change (7 days):
+      <span style="font-size: 1.4rem" [style.color]="currencyData.quote.USD.percent_change_7d < 0 ? 'red' : 'green'">
+        {{currencyData.quote.USD.percent_change_7d}}%
+      </span>
+    </p>
+    <p>Percentage Change (24 hours):
+      <span style="font-size: 1.4rem" [style.color]="currencyData.quote.USD.percent_change_24h < 0 ? 'red' : 'green'">
+        {{currencyData.quote.USD.percent_change_24h}}%
+      </span>
+    </p>
+    <p>Market Pair: {{currencyData.num_market_pairs}}</p>
+
   </div>
 </div>
