@@ -12,11 +12,11 @@ export class HomeComponent implements OnInit {
 
   public rows: Array<any> = [];
   public columns: Array<any> = [
-    { title: 'Rank', name: 'cmc_rank', filtering: { filterString: '', placeholder: 'Search by rank'} },
-    { title: 'Name', name: 'name', filtering: { filterString: '', placeholder: 'Filter by name' } },
-    { title: 'Symbol', name: 'symbol', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
-    { title: 'Price ($)', name: 'price', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
-    { title: 'Circulating Supply', name: 'circulating_supply', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
+    { title: 'Rank', name: 'cmc_rank', filtering: { filterString: '', placeholder: 'Search by CmcRank'} },
+    { title: 'Name', name: 'name', filtering: { filterString: '', placeholder: 'Search by Name' } },
+    { title: 'Symbol', name: 'symbol', filtering: { filterString: '', placeholder: 'Search by Symbol' } },
+    { title: 'Price ($)', name: 'price', filtering: { filterString: '', placeholder: 'Search by Price' } },
+    { title: 'Circulating Supply', name: 'circulating_supply', filtering: { filterString: '', placeholder: 'Search by Circulating Supply' } },
   ];
   public page: number = 1;
   public itemsPerPage: number = 100;
@@ -39,12 +39,20 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let data = this.dataService.getCachedList();
+    if(data) {
+      this.data = data;
+      this.length = this.data.length;
+      this.onChangeTable(this.config);
+      return;
+    }
     this.dataService.getCurrencyList().subscribe((res) => {
       const { data } = res;
       data.forEach((item) => {
         item.price = item.quote.USD.price;
       })
       this.data = data;
+      this.dataService.setCurrencyList(data);
       console.log(data);
       this.length = this.data.length;
       this.onChangeTable(this.config);
