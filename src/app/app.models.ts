@@ -8,5 +8,6 @@ export interface Currency {
             volume_24h: number
         }
     }
-    symbol: string
+    symbol: string,
+    slug: string
 }

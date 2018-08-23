@@ -10,7 +10,17 @@ export class DataService {
 
   private BASE_URL = 'https://pro-api.coinmarketcap.com/v1/';
 
+  static selectedData = {};
+
   constructor(private http: HttpClient) { }
+
+  setSelectedData(data): any {
+    DataService.selectedData = data;
+  }
+
+  getSelectedData(): any {
+    return DataService.selectedData;
+  }
 
   public getCurrencyList(): Observable<any> {
     return this.http.get(

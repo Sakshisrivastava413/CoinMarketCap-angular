@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/services/data/data.service';
+import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
 
 @Component({
   selector: 'app-detail',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetailComponent implements OnInit {
 
-  constructor() { }
+  public currencyData = {};
+
+  constructor(public dataService: DataService) { }
 
   ngOnInit() {
+    this.currencyData = this.dataService.getSelectedData().row;
+    console.log(this.currencyData);
   }
 
 }

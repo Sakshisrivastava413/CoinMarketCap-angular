@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data/data.service';
 import { Currency } from '../../app.models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,11 +12,11 @@ export class HomeComponent implements OnInit {
 
   public rows: Array<any> = [];
   public columns: Array<any> = [
+    { title: 'Rank', name: 'cmc_rank', filtering: { filterString: '', placeholder: 'Search by rank'} },
     { title: 'Name', name: 'name', filtering: { filterString: '', placeholder: 'Filter by name' } },
-    { title: 'Symbol', name: 'symbol', filtering: { filterString: '', placeholder: 'Filter by Supply' } },
-    // { title: 'Extn.', name: 'ext', sort: '', filtering: { filterString: '', placeholder: 'Filter by extn.' } },
-    // { title: 'Start date', className: 'text-warning', name: 'startDate' },
-    // { title: 'Salary ($)', name: 'salary' }
+    { title: 'Symbol', name: 'symbol', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
+    { title: 'Price ($)', name: 'price', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
+    { title: 'Circulating Supply', name: 'circulating_supply', filtering: { filterString: '', placeholder: 'Filter by Symbol' } },
   ];
   public page: number = 1;
   public itemsPerPage: number = 100;
@@ -32,14 +33,21 @@ export class HomeComponent implements OnInit {
 
   public data: Currency[];
 
-  constructor(public dataService: DataService) { }
+  constructor(
+    public dataService: DataService,
+    public router: Router
+  ) { }
 
   ngOnInit() {
     this.dataService.getCurrencyList().subscribe((res) => {
-      this.data = res.data;
+      const { data } = res;
+      data.forEach((item) => {
+        item.price = item.quote.USD.price;
+      })
+      this.data = data;
+      console.log(data);
       this.length = this.data.length;
       this.onChangeTable(this.config);
-      console.log(this.data);
     })
   }
 
@@ -85,7 +93,7 @@ export class HomeComponent implements OnInit {
     this.columns.forEach((column: any) => {
       if (column.filtering) {
         filteredData = filteredData.filter((item: any) => {
-          return item[column.name].toLowerCase().match(column.filtering.filterString.toLowerCase());
+          return String(item[column.name]).toLowerCase().match(String(column.filtering.filterString).toLowerCase());
         });
       }
     });
@@ -133,6 +141,8 @@ export class HomeComponent implements OnInit {
 
   public onCellClick(data: any): any {
     console.log(data);
+    this.dataService.setSelectedData(data);
+    this.router.navigate(['details']);
   }
 
 }
